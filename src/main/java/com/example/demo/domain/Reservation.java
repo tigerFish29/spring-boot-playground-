@@ -5,6 +5,8 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,11 +14,30 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+
+import com.example.demo.model.BookingType;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+
 
 @Entity
 public class Reservation {
+
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private BookingType bookingType;
  
 
     @Id
@@ -33,19 +54,21 @@ public class Reservation {
     @Column(nullable = false)
     private LocalTime endTime;
 
-    
-
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private OffsetDateTime dateCreated;
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
+
+    
+    @Column
+    @CreationTimestamp
+    private OffsetDateTime dateCreated;
+
+    
+    @Column
+    @UpdateTimestamp
+    private OffsetDateTime lastUpdated;
+
+  
 
     // getters anb setters 
 
